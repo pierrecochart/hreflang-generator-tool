@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hreflang Pro: International SEO Tag Generator | Pierre Cochart</title>
+    <meta name="description" content="Generate perfect, error-free hreflang tags for your international website. Ensure Google serves the right language version to your users. Built for SEOs.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); padding: 2rem 1rem; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        header { text-align: center; margin-bottom: 3rem; }
+        h1 {
+            font-size: 2.75rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: var(--secondary); font-size: 1.1rem; }
+
+        /* Row Styling */
+        .url-row {
+            background: var(--card); border: 1px solid var(--border); border-radius: 1rem;
+            padding: 1.5rem; margin-bottom: 1rem; display: grid;
+            grid-template-columns: 1fr 180px 180px auto; gap: 1rem;
+            align-items: end; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .input-group label { font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; }
+        
+        input, select {
+            padding: 0.7rem; border: 1px solid var(--border); border-radius: 0.5rem;
+            font-family: inherit; font-size: 0.9rem; outline: none;
+        }
+        input:focus { border-color: var(--primary); }
+
+        .btn {
+            padding: 0.7rem 1.2rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.9rem;
+            cursor: pointer; transition: 0.2s; border: none;
+        }
+        .btn-add { background: var(--text); color: white; margin-bottom: 2rem; width: 100%; }
+        .btn-add:hover { background: black; }
+        
+        .btn-delete { background: #fee2e2; color: #ef4444; height: 42px; width: 42px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .btn-delete:hover { background: #fecaca; }
+
+        /* Output Panel */
+        .output-panel {
+            background: #1e293b; color: #e2e8f0; border-radius: 1rem; padding: 2rem;
+            margin-top: 2rem; position: relative;
+        }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .output-title { font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+        pre { white-space: pre-wrap; word-break: break-all; font-family: 'Monaco', monospace; font-size: 0.9rem; line-height: 1.7; color: #6ee7b7; }
+
+        .btn-copy { background: var(--primary); color: white; padding: 0.5rem 1rem; font-size: 0.8rem; }
+        .btn-copy:hover { background: var(--primary-dark); }
+
+        .footer-cta { margin-top: 5rem; text-align: center; border-top: 1px solid var(--border); padding-top: 3rem; }
+        
+        #toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #1e293b; color: white; padding: 0.75rem 1.5rem;
+            border-radius: 2rem; font-size: 0.9rem; opacity: 0; transition: 0.3s; z-index: 100;
+        }
+        #toast.show { opacity: 1; transform: translateY(-10px); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 850px) {
+            .url-row { grid-template-columns: 1fr; }
+            .btn-delete { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Hreflang Pro</h1>
+            <p class="subtitle">Generate valid, self-referencing hreflang tags for international SEO.</p>
+        </header>
+
+        <main>
+            <div id="url-container">
+                </div>
+
+            <button class="btn btn-add" onclick="addRow()">+ Add Language Version</button>
+
+            <div class="output-panel">
+                <div class="output-header">
+                    <span class="output-title">Generated Head Tags</span>
+                    <button class="btn btn-copy" onclick="copyCode()">Copy Tags</button>
+                </div>
+                <pre id="output-code"></pre>
+            </div>
+        </main>
+
+        <footer class="footer-cta">
+            <a href="https://www.buymeacoffee.com/PierreCochart" target="_blank">
+                <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px; width: 217px;">
+            </a>
+            <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--secondary);">Built by Pierre Cochart</p>
+        </footer>
+    </div>
+
+    <div id="toast">Tags copied to clipboard!</div>
+
+    <script>
+        const languages = {
+            "en": "English", "es": "Spanish", "fr": "French", "de": "German", "it": "Italian", "pt": "Portuguese", 
+            "zh": "Chinese", "ja": "Japanese", "ko": "Korean", "ru": "Russian", "ar": "Arabic", "nl": "Dutch", "hi": "Hindi"
+        };
+
+        const regions = {
+            "": "Global / No Region", "us": "United States", "gb": "United Kingdom", "ca": "Canada", "au": "Australia", 
+            "de": "Germany", "fr": "France", "es": "Spain", "mx": "Mexico", "br": "Brazil", "cn": "China", "jp": "Japan"
+        };
+
+        let rowCount = 0;
+
+        function addRow(url = '', lang = 'en', region = '') {
+            rowCount++;
+            const container = document.getElementById('url-container');
+            const row = document.createElement('div');
+            row.className = 'url-row';
+            row.id = `row-${rowCount}`;
+
+            row.innerHTML = `
+                <div class="input-group">
+                    <label>Page URL</label>
+                    <input type="text" placeholder="https://site.com/page" value="${url}" oninput="generateTags()">
+                </div>
+                <div class="input-group">
+                    <label>Language</label>
+                    <select onchange="generateTags()">
+                        ${Object.entries(languages).map(([code, name]) => `<option value="${code}" ${code === lang ? 'selected' : ''}>${name} (${code})</option>`).join('')}
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Region (Optional)</label>
+                    <select onchange="generateTags()">
+                        <option value="x-default">x-default (Fallback)</option>
+                        ${Object.entries(regions).map(([code, name]) => `<option value="${code}" ${code === region ? 'selected' : ''}>${name} ${code ? `(${code})` : ''}</option>`).join('')}
+                    </select>
+                </div>
+                <button class="btn btn-delete" onclick="removeRow(${rowCount})" title="Remove Row">×</button>
+            `;
+
+            container.appendChild(row);
+            generateTags();
+        }
+
+        function removeRow(id) {
+            const row = document.getElementById(`row-${id}`);
+            if (document.querySelectorAll('.url-row').length > 1) {
+                row.remove();
+                generateTags();
+            } else {
+                alert("You need at least one URL version.");
+            }
+        }
+
+        function generateTags() {
+            const rows = document.querySelectorAll('.url-row');
+            const output = document.getElementById('output-code');
+            let tags = "";
+
+            rows.forEach(row => {
+                const url = row.querySelector('input').value || 'https://example.com/page';
+                const lang = row.querySelectorAll('select')[0].value;
+                const region = row.querySelectorAll('select')[1].value;
+
+                let hreflang = lang;
+                if (region === 'x-default') {
+                    hreflang = 'x-default';
+                } else if (region !== "") {
+                    hreflang = `${lang}-${region}`;
+                }
+
+                tags += `&lt;link rel="alternate" hreflang="${hreflang}" href="${url}" /&gt;\n`;
+            });
+
+            output.innerHTML = tags;
+        }
+
+        function copyCode() {
+            const code = document.getElementById('output-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
+
+        // Initialize with 2 rows for example
+        addRow('https://example.com/', 'en', '');
+        addRow('https://example.com/es/', 'es', '');
+    </script>
+</body>
+</html>
